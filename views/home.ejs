@@ -7,5 +7,17 @@
 </head>
 <body>
     <h1>Hello from home page</h1>
+    <!-- rendering the data sent from app.js -->
+    <h2>All URLs</h2>
+    <ul>
+        <% urls.forEach(url => { %>
+         <li>
+            <h3>Short URL: </h3><%= url.shortURL %>
+            <h3>Original URL: </h3><%= url.originalUrl %>
+            <h3>Clicks: </h3><%= url.clicks %>
+         </li>
+        <% }) %>
+    </ul>
+    <h1>Name: <%= name %></h1>
 </body>
 </html>
