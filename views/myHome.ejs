@@ -1,0 +1,399 @@
+<!-- THIS IS THE HOME.EJS WRITTEN BY ME -->
+ <!-- THE SECOND FILE HAS BETTER STYLES -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        h1 {
+            color: #ff007a;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 0, 122, 0.7);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 0, 122, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 0, 122, 0.9); }
+        }
+
+        .form-container {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(255, 0, 122, 0.2);
+            border: 1px solid rgba(255, 0, 122, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .form-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 0, 122, 0.3);
+        }
+
+        h2 {
+            color: #00ddeb;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #ff007a;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+
+        input {
+            width: 100%;
+            margin: 12px 0;
+            padding: 15px;
+            border: 1px solid rgba(255, 0, 122, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff007a;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(255, 0, 122, 0.5);
+        }
+
+        button {
+            width: 100%;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff007a, #00ddeb);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(255, 0, 122, 0.4);
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #e6006b, #00b8c5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 122, 0.6);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .url-list {
+            margin-top: 40px;
+        }
+
+        .url-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .url-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 0, 122, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 25px rgba(255, 0, 122, 0.2);
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 180px;
+        }
+
+        .url-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 122, 0.15) 0%, transparent 70%);
+            animation: pulseGlow 6s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .url-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 35px rgba(255, 0, 122, 0.4);
+            border-color: #00ddeb;
+        }
+
+        .url-card p {
+            margin: 12px 0;
+            color: #e5e5e5;
+            font-size: 1.1em;
+        }
+
+        .url-card strong {
+            color: #00ddeb;
+            margin-right: 8px;
+            text-shadow: 0 0 5px rgba(0, 221, 235, 0.3);
+        }
+
+        .short-link {
+            color: #ff007a;
+            text-decoration: none;
+            text-shadow: 0 0 5px rgba(255, 0, 122, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .short-link:hover {
+            color: #e6006b;
+            text-shadow: 0 0 10px rgba(255, 0, 122, 0.6);
+        }
+
+        .click-count {
+            display: inline-block;
+            background: rgba(0, 221, 235, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: #00ddeb;
+            text-shadow: 0 0 5px rgba(0, 221, 235, 0.3);
+        }
+
+        .no-urls {
+            color: #ff007a;
+            font-size: 1.2em;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 0, 122, 0.4);
+            padding: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            input, button {
+                font-size: 1em;
+            }
+
+            .url-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .url-card {
+                padding: 15px;
+            }
+
+            .url-card p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+
+    <!-- get user id form -->
+    <div class="form-container">
+        <h2>Get User ID</h2>
+        <form id="userIdForm">
+            <input type="text" name="username" placeholder="Enter username" required><br>
+            <button type="submit">Get User ID</button>
+        </form>
+    </div>
+
+    <!-- Create User Form -->
+    <div class="form-container">
+        <h2>Create New User</h2>
+        <form id="userForm">
+            <input type="text" name="name" placeholder="Enter name" required><br>
+            <input type="email" name="email" placeholder="Enter email" required><br>
+            <button type="submit">Create User</button>
+        </form>
+    </div>
+
+    <!-- Create Short URL Form -->
+    <div class="form-container">
+        <h2>Create Short URL</h2>
+        <form id="urlForm">
+            <input type="url" name="originalUrl" placeholder="Enter URL to shorten" required><br>
+            <input type="text" name="owner" placeholder="Enter user ID" required><br>
+            <button type="submit">Create Short URL</button>
+        </form>
+    </div>
+
+    <!-- form to get original url from short id -->
+    <div class="form-container">
+        <h2>Get Original URL</h2>
+        <form id="shortIdForm">
+            <input type="text" name="shortId" placeholder="Enter short ID" required><br>
+            <button type="submit">Get Original URL</button>
+        </form>
+    </div>
+
+
+    <!-- Display URLs -->
+    <div class="url-list">
+        <h2>All URLs</h2>
+        <% if (urls && urls.length > 0) { %>
+            <div class="url-cards">
+                <% urls.forEach(url => { %>
+                    <div class="url-card">
+                        <div class="card-inner">
+                            <p><strong>Original URL:</strong> <span class="url-text"><%= url.originalUrl %></span></p>
+                            <p><strong>Short ID:</strong> <span class="url-text"><%= url.shortURL %></span></p>
+                            <p><strong>Clicks:</strong> <span class="click-count"><%= url.clicks %></span></p>
+                            <p><strong>Created At:</strong> <%= url.createdAt.toLocaleString() %></p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p class="no-urls">No URLs found</p>
+        <% } %>
+    </div>
+
+    <script>
+        // Handle User Creation
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email')
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('User created successfully! User ID: ' + data._id);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error creating user');
+            }
+        });
+
+        // Handle URL Creation
+        document.getElementById('urlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/api/urls/shorten', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        originalUrl: formData.get('originalUrl'),
+                        owner: formData.get('owner')
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('URL shortened successfully!');
+                    window.location.reload(); // Refresh to see new URL
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error shortening URL');
+            }
+        });
+        //Handle userid form
+        document.getElementById('userIdForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const username = formData.get('username');
+            try{
+                const response = await fetch('/api/users/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const data = await response.json();
+                //for each user in data, check if the username matches   
+                data.forEach(user => {
+                    if(user.name === username){
+                        alert('Your user id is: ' + user._id);
+                        return;
+                    }
+                })
+                alert('User not found');
+            }catch(error)
+            {
+                alert('Error finding user / Server error');
+            }
+        })
+
+        //Handle short id form
+        document.getElementById('shortIdForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const shortId = formData.get('shortId');
+            try{
+                const response = await fetch(`/api/urls/redirect?shortId=${encodeURIComponent(shortId)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                // console.log(`response: ${response}`);
+                const data = await response.json();
+                // console.log(data.originalUrl);
+                if(response.ok){
+                    //redirect to the original url in new window 
+                    window.open(data.data.originalUrl, '_blank');
+                    // alert('Original URL: ' + data.data.originalUrl);
+                }else{
+                    alert('Error: ' + data.error);
+                }
+            }catch(error){
+                alert('Error redirecting / Server error');
+            }
+        })
+    </script>
+</body>
+</html>

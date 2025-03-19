@@ -3,21 +3,810 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>URL Shortener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #000;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 0, 122, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 221, 235, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff007a, #00ddeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: titleAnimation 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleAnimation {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.03); filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .glass-container {
+            background: rgba(10, 10, 25, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 35px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff007a, #00ddeb);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .glass-container:hover::before {
+            transform: scaleX(1);
+        }
+
+        .glass-container:hover {
+            box-shadow: 0 15px 40px rgba(255, 0, 122, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff007a, #00ddeb);
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff007a;
+            box-shadow: 0 0 0 3px rgba(255, 0, 122, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus ~ .input-icon {
+            color: #ff007a;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #ff007a, #00ddeb);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(255, 0, 122, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 122, 0.5);
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .urls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .url-card {
+            background: rgba(15, 15, 35, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .url-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 0, 122, 0.3);
+            border-color: rgba(255, 0, 122, 0.3);
+        }
+
+        .url-card .url-header {
+            padding: 18px;
+            background: rgba(255, 0, 122, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .url-card .url-content {
+            padding: 20px;
+        }
+
+        .url-card p {
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .url-card .url-original {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .url-card .url-short {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #00ddeb;
+            margin-bottom: 20px;
+        }
+
+        .url-card .url-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .url-card .url-clicks {
+            background: rgba(0, 221, 235, 0.1);
+            color: #00ddeb;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+
+        .url-card .url-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .badge-primary {
+            background: rgba(255, 0, 122, 0.2);
+            color: #ff007a;
+        }
+
+        .no-urls {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .copy-btn i {
+            margin-right: 5px;
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 0, 122, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: -1;
+        }
+
+        .glow-1 {
+            top: -150px;
+            left: -150px;
+        }
+
+        .glow-2 {
+            bottom: -150px;
+            right: -150px;
+            background: radial-gradient(circle, rgba(0, 221, 235, 0.3) 0%, transparent 70%);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(10, 10, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border-left: 3px solid #ff007a;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.active {
+            transform: translateX(0);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .toast-icon {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: #ff007a;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff007a, #00ddeb);
+            z-index: 1000;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .loading.active {
+            animation: loading 1.5s ease;
+        }
+
+        @keyframes loading {
+            0% { transform: scaleX(0); }
+            50% { transform: scaleX(0.5); }
+            100% { transform: scaleX(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .glass-container {
+                padding: 25px;
+            }
+
+            .urls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            margin: 30px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello from home page</h1>
-    <!-- rendering the data sent from app.js -->
-    <h2>All URLs</h2>
-    <ul>
-        <% urls.forEach(url => { %>
-         <li>
-            <h3>Short URL: </h3><%= url.shortURL %>
-            <h3>Original URL: </h3><%= url.originalUrl %>
-            <h3>Clicks: </h3><%= url.clicks %>
-         </li>
-        <% }) %>
-    </ul>
-    <h1>Name: <%= name %></h1>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="hero">
+            <h1>URL Shortener</h1>
+            <p>Transform long URLs into short, memorable links with our powerful URL shortening service.</p>
+        </div>
+        
+        <div class="glass-container">
+            <div class="glow-effect glow-1"></div>
+            <h2 class="section-title">Get User ID</h2>
+            <form id="userIdForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+                    <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                </div>
+                <button type="submit" class="btn">Find User ID</button>
+            </form>
+        </div>
+        
+        <div class="glass-container">
+            <div class="glow-effect glow-2"></div>
+            <h2 class="section-title">Create New User</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Enter your name" required>
+                    <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+                    <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+                </div>
+                <button type="submit" class="btn">Create User</button>
+            </form>
+        </div>
+        
+        <div class="glass-container">
+            <h2 class="section-title">Create Short URL</h2>
+            <form id="urlForm">
+                <div class="form-group">
+                    <label for="originalUrl">URL to Shorten</label>
+                    <input type="url" id="originalUrl" name="originalUrl" class="form-input" placeholder="https://example.com/long-url" required>
+                    <span class="input-icon"><i class="fa-solid fa-link"></i></span>
+                </div>
+                <div class="form-group">
+                    <label for="owner">Your User ID</label>
+                    <input type="text" id="owner" name="owner" class="form-input" placeholder="Enter your user ID" required>
+                    <span class="input-icon"><i class="fa-solid fa-id-card"></i></span>
+                </div>
+                <button type="submit" class="btn">Generate Short URL</button>
+            </form>
+        </div>
+        
+        <div class="glass-container">
+            <h2 class="section-title">Get Original URL</h2>
+            <form id="shortIdForm">
+                <div class="form-group">
+                    <label for="shortId">Short URL ID</label>
+                    <input type="text" id="shortId" name="shortId" class="form-input" placeholder="Enter the short URL ID" required>
+                    <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
+                <button type="submit" class="btn">Redirect to Original URL</button>
+            </form>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="glass-container">
+            <h2 class="section-title">All URLs</h2>
+            <div id="urlsContainer" class="urls-grid">
+                <!-- URLs will be populated here -->
+                <div class="no-urls">
+                    <i class="fa-solid fa-link-slash fa-2x" style="margin-bottom: 15px;"></i>
+                    <p>No URLs found. Create your first short URL above!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <div class="loading" id="loading"></div>
+    
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.width = `${Math.random() * 3 + 1}px`;
+            particle.style.height = particle.style.width;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('.toast-icon i');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check';
+                toast.style.borderColor = '#ff007a';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-xmark';
+                toast.style.borderColor = '#ff4d4d';
+            }
+            
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+        
+        // Loading indicator
+        function showLoading() {
+            const loading = document.getElementById('loading');
+            loading.classList.add('active');
+            
+            setTimeout(() => {
+                loading.classList.remove('active');
+            }, 1500);
+        }
+        
+        // Handle User ID Form
+        document.getElementById('userIdForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            
+            const formData = new FormData(e.target);
+            const username = formData.get('username');
+            
+            try {
+                const response = await fetch('/api/users/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                let found = false;
+                
+                data.forEach(user => {
+                    if (user.name === username) {
+                        found = true;
+                        showToast(`User ID: ${user._id}`, 'success');
+                        // Auto-fill the user ID in the URL form
+                        document.getElementById('owner').value = user._id;
+                    }
+                });
+                
+                if (!found) {
+                    showToast('User not found', 'error');
+                }
+            } catch (error) {
+                showToast('Error finding user', 'error');
+            }
+        });
+        
+        // Handle User Creation
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email')
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('User created successfully!', 'success');
+                    // Auto-fill the user ID in the URL form
+                    document.getElementById('owner').value = data._id;
+                    // Clear the form
+                    e.target.reset();
+                } else {
+                    showToast(`Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showToast('Error creating user', 'error');
+            }
+        });
+        
+        // Handle URL Creation
+        document.getElementById('urlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/api/urls/shorten', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        originalUrl: formData.get('originalUrl'),
+                        owner: formData.get('owner')
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('URL shortened successfully!', 'success');
+                    // Clear the original URL field
+                    document.getElementById('originalUrl').value = '';
+                    // Load all URLs
+                    loadUrls();
+                } else {
+                    showToast(`Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showToast('Error shortening URL', 'error');
+            }
+        });
+        
+        // Handle Short ID Form
+        document.getElementById('shortIdForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            
+            const formData = new FormData(e.target);
+            const shortId = formData.get('shortId');
+            
+            try {
+                const response = await fetch(`/api/urls/redirect?shortId=${encodeURIComponent(shortId)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('Redirecting to original URL', 'success');
+                    window.open(data.data.originalUrl, '_blank');
+                    // Clear the form
+                    e.target.reset();
+                } else {
+                    showToast(`Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showToast('Error redirecting', 'error');
+            }
+        });
+        
+        // Load all URLs
+        async function loadUrls() {
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/urls/all', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                const urlsContainer = document.getElementById('urlsContainer');
+                
+                if (response.ok && data.data.length > 0) {
+                    urlsContainer.innerHTML = '';
+                    
+                    data.data.forEach(url => {
+                        const shortUrl = `${url.shortURL}`;
+                        const urlCard = document.createElement('div');
+                        urlCard.className = 'url-card';
+                        
+                        urlCard.innerHTML = `
+                            <div class="url-header">
+                                <span class="badge badge-primary">URL #${url.shortURL}</span>
+                            </div>
+                            <div class="url-content">
+                                <div class="url-original">
+                                    <strong>Original:</strong> ${url.originalUrl}
+                                </div>
+                                <div class="url-short">
+                                    <strong>ShortID:</strong> ${url.shortURL}
+                                    
+                                    <button class="copy-btn" data-url="${shortUrl}">
+                                        <i class="fa-regular fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <div class="url-meta">
+                                    <span class="url-clicks">
+                                        <i class="fa-solid fa-chart-simple"></i> ${url.clicks} clicks
+                                    </span>
+                                    <span class="url-date">
+                                        ${new Date(url.createdAt).toLocaleDateString()}
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+                        
+                        urlsContainer.appendChild(urlCard);
+                    });
+                    
+                    // Add event listeners to copy buttons
+                    document.querySelectorAll('.copy-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const url = this.getAttribute('data-url');
+                            navigator.clipboard.writeText(url).then(() => {
+                                showToast('URL copied to clipboard!', 'success');
+                                this.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+                                setTimeout(() => {
+                                    this.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+                                }, 2000);
+                            });
+                        });
+                    });
+                } else {
+                    urlsContainer.innerHTML = `
+                        <div class="no-urls">
+                            <i class="fa-solid fa-link-slash fa-2x" style="margin-bottom: 15px;"></i>
+                            <p>No URLs found. Create your first short URL above!</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                showToast('Error loading URLs', 'error');
+            }
+        }
+        
+        // Load URLs on page load
+        window.addEventListener('load', loadUrls);
+    </script>
 </body>
 </html>
