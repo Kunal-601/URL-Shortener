@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { createShortUrl, getAllUrls, redirectUrl } from "../controllers/url.controller.js";
+import { createShortUrl, getAllUrls, getUserUrls, redirectUrl } from "../controllers/url.controller.js";
+import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post("/shorten", createShortUrl);
-router.get('/all', getAllUrls);
+//redirect url
 router.get('/redirect', redirectUrl);
+
+//secured routes
+router.post("/shorten", verifyJWT, createShortUrl);
+router.get('/my-urls', verifyJWT, getUserUrls);
 
 export default router;
