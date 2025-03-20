@@ -44,7 +44,6 @@ export const createShortUrl = async(req, res) => {
     }
 }
 
-// Get all URLs
 export const redirectUrl = async(req, res) => {
    try{
         const {shortId} = req.query;

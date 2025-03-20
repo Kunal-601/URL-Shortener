@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 //register user
@@ -34,8 +34,7 @@ export const registerUser = async (req, res) => {
             email,
             password
         })
-        await newUser.save();
-        res
+        return res
         .status(201)
         .json({
             success: true,
@@ -47,7 +46,7 @@ export const registerUser = async (req, res) => {
         .status(500)
         .json({
             success: false,
-            message: error.message
+            message: "User registration failed / " + error.message
         })
     }
 }

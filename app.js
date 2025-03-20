@@ -25,12 +25,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 //         name: 'Kunal Kaushik'
 //     });
 // })
-//routes
-app.use('/api/urls', urlRouter);
-app.use('/api/users', userRouter);
-app.use('/api/auth', authRouter);
 
 //views route
 app.use('/', viewsRouter);
+
+//url and user routes
+app.use('/api/urls', urlRouter);
+app.use('/api/users', userRouter);
+
+//auth route
+app.use('/api/auth', authRouter); //for api endpoints (POST /register, POST /login, POST /logout)
+app.use('/auth', authRouter); //for page rendering (GET /login, GET /register)
 
 export {app};
