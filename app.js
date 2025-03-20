@@ -5,7 +5,7 @@ import userRouter from './routes/user.route.js';
 import path from 'path';
 // import URL from './models/url.model.js';
 import viewsRouter from './routes/views.route.js';
-
+import authRouter from './routes/auth.route.js';
 
 const app = express();
 
@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //routes
 app.use('/api/urls', urlRouter);
 app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 
 //views route
 app.use('/', viewsRouter);

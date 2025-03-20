@@ -84,3 +84,28 @@ export const getAllUrls = async(req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+// Get all URLs for the logged in user
+export const getUserUrls = async(req, res) => {
+    try{
+        const {user} = req.user;
+        const userID = user._id;
+        const loggedInUserUrls = await URL.find({owner: userID});
+        res
+        .status(200)
+        .json({
+            success: true,
+            count: loggedInUserUrls.length,
+            data: loggedInUserUrls
+        })
+    }catch(error)
+    {
+        res
+        .status(500)
+        .json({
+            success: false,
+            message: "server error"
+        })
+    }
+}
+
