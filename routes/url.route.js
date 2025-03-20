@@ -8,10 +8,10 @@ const router = Router();
 router.get('/redirect', redirectUrl);
 // router.get('/', getAllUrls);
 
-router.post("/shorten", createShortUrl);
 
 
 //secured routes
+router.post("/shorten", verifyJWT, createShortUrl);
 router.get('/my-urls', verifyJWT, getUserUrls);
 
 export default router;

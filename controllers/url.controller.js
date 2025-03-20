@@ -6,17 +6,13 @@ import isValidUrl from "../utils/isValidUrl.js";
 // Create a short URL
 export const createShortUrl = async(req, res) => {
     try{
-        const {originalUrl, owner} = req.body;
+        const {originalUrl} = req.body;
         // check if the url is valid
         if(!isValidUrl(originalUrl))
         {
             return res.status(400).json({error: "Invalid URL"});
         }
-        //check for valid owner
-        if(!owner)
-        {
-            return res.status(400).json({error: "Owner ID is required"});
-        }
+        const owner = req.user._id;
         const shortid = nanoid(8);
         const shortURL = `${process.env.BASE_URL}/${shortid}`;
 
@@ -87,7 +83,7 @@ export const getAllUrls = async(req, res) => {
 // Get all URLs for the logged in user
 export const getUserUrls = async(req, res) => {
     try{
-        const {user} = req.user;
+        const user = req.user;
         const userID = user._id;
         const loggedInUserUrls = await URL.find({owner: userID});
         res
