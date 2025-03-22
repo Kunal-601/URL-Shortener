@@ -1,7 +1,7 @@
 import express from "express";
 import { loginUser, logoutUser, registerUser, updateUser } from "../controllers/auth.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJWT } from "../middlewares/verifyJWT.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
